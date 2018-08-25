@@ -9,7 +9,8 @@ var bodyParser = require('body-parser');    // pull information from HTML POST (
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 var Todo;
 // configuration=================
-let mongouri = "mongodb://localhost:27017";
+let mongouri = "mongodb://sairam:sairam99@ds133762.mlab.com:33762/retreatregistrationserver";
+                //mongodb://saiskee:sairam99@ds133762.mlab.com:33762/retreatregistrationserver
 mongoose.connect(mongouri); 
 
 app.listen(8080);
