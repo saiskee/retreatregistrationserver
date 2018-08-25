@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Retreat Data Table</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+  
+  <!-- Angular Material Library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+
+  <script type="text/javascript" src = "/scripts/tableapp.js"> </script>
+  
+</head>
+
+<body>
+  <div ng-app="tableApp"  class="container" style="width:100%;" ng-cloak>
+
+
+    <div style="text-align:center;color:darkgrey">
+      <h3>
+        <b>Registration Form Data</b>
+      </h3>
+    </div>
+    <div ng-controller="TableAppController">
+
+      <h4 ng-init="getRegistrees()">
+        <b>Registered Users</b>
+      </h4>
+
+      <div align="left">
+        <button class="btn btn-success" ng-click="getRegistrees()">Refresh Users</button>
+        <button class="btn btn-warning" ng-click="toggleLeft()">Show Filters</button>
+        <button class="btn btn-link" ng-click="exportToExcel('#datatable')">
+          <span class="glyphicon glyphicon-share"></span> Export to Excel
+        </button>
+        <br>
+        <br>
+      </div>
+
+
+      <style>
+        .sbtn {
+          display: inline-block;
+          padding: 6px 12px;
+          margin-bottom: 0;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.42857143;
+          text-align: center;
+          white-space: nowrap;
+          vertical-align: middle;
+          cursor: pointer;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          background-image: none;
+          border: 1px solid transparent;
+          border-radius: 4px
+        }
+
+
+        .schemabuttontrue,
+        .schemabuttonfalse {
+          -webkit-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+          -moz-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+          -ms-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+          -o-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+          transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+          max-width: 180px;
+          text-decoration: none;
+          border-radius: 4px;
+        }
+
+        .schemabuttontrue {
+          color: white;
+          background-color: green;
+          box-shadow: rgba(59, 218, 67, 0.719) 0 0px 0px 2px inset;
+
+        }
+
+
+        .schemabuttonfalse {
+          color: rgba(255, 255, 255, 0.85);
+          background-color: red;
+          box-shadow: rgba(30, 22, 54, 0.7) 0 0px 0px 40px inset;
+
+        }
+      </style>
+
+
+      <style>
+        md-sidenav,
+        md-sidenav.md-locked-open,
+        md-sidenav.md-closed.md-locked-open-add-active {
+          min-width: 20px !important;
+          width:200px;
+          max-width: 400px !important;
+        }
+      </style>
+
+      <md-sidenav layout="column" class="md-sidenav-left" md-disable-backdrop md-component-id="left" md-whiteframe="4">
+
+       
+
+
+          <button type="button" class="btn btn-danger" ng-click="toggleLeft()">
+            <span class="glyphicon glyphicon-remove"></span> Close Filters
+          </button>
+
+        
+
+        <md-content layout="column">
+          <md-button class="sbtn schemabutton{{schema.show}}" ng-repeat="schema in registreeschema" ng-click="schema.show = !schema.show">{{schema.name}}</md-button>
+
+        </md-content>
+
+      </md-sidenav>
+
+      <input type="text" class="form-control" placeholder="Search for Registree" ng-model="mainsearch">
+
+      <h1 ng-if="!registrees.length" style="text-align:center;color:darkred">No registered users</h1>
+      <div id="datatable" style="overflow-x:auto;height:100%">
+
+        <table ng-if="registrees.length" class="table table-striped table-bordered table-responsive">
+
+          <thead>
+            <tr>
+
+              <th ng-repeat="schema in registreeschema" ng-if="schema.show">
+                <input type="text" ng-model="search[schema.propertyname]" placeholder="Search {{schema.name}}">
+                <span ng-bind="schema.name"></span>
+              </th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr  ng-repeat="registree in registrees | filter: mainsearch | filter: search">
+              <td ng-repeat="schema in registreeschema" style="font-size: medium;"ng-if="schema.show" ng-bind="propertytostring(schema.propertyname,registree[schema.propertyname])">
+              </td>
+             
+                <td>
+                <div class="btn-group-vertical">
+                <button ng-click="showEditBox($event,registree)" class = "btn btn-primary"> <span class = "glyphicon glyphicon-pencil"></span></button>
+                <button ng-click="deleteRegistree(registree._id)" class="btn btn-danger"> <span class ="glyphicon glyphicon-remove"></span></button> 
+                <button ng-click="showCheckinBox($event,registree)" class="btn btn-warning"> <span class ="glyphicon glyphicon-time"></span></button>
+                <button ng-click="showMoneyBox($event,registree)" class="btn btn-success"> <span class ="glyphicon glyphicon-usd"></span></button>
+                </div>
+                </td> 
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="visibility: hidden">
+        
+          <div class="md-dialog-container" id="editDialog">
+            <md-dialog layout-padding>
+                <form role="form" name="mainform" class="well">
+                    
+                    <div class="form-group">
+                        <label for= "mainregistree"> Parent Registree: </label>
+                        <input type = "text" class = "form-control" placeholder = "Parent Registree" ng-model = "editingRegistree.mainregistree">
+                    </div> 
+                    <div class="form-group">  
+                        <label for="name"> Name:</label>
+                        <input type="text" id="name" class="form-control" placeholder="Enter Name " ng-model="editingRegistree.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="age"> Age:</label>
+                        <span>
+                            <input type="number" id="age" class="form-control" ng-model="editingRegistree.age">
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Which group SSE are you in?</label>
+                        <br>
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="">Not SSE
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Pre-SSE">Pre-SSE
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 1">Group 1
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 2">Group 2
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 3">Group 3
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 4">Group 4
+                    </div>
+                    <div class="form-group" >
+                        <label>Are you a YA?</label>
+                        <input type="radio" ng-model="editingRegistree.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="true">Yes
+                        <input type="radio" ng-model="editingRegistree.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="false">No
+                    </div>
+                    <div class="form-group">
+                        <label for="gender"> Gender:</label>
+                        <input type="radio" ng-model="editingRegistree.gender" id="gender" name="gender" class="form-check-input" value="Male">Male
+                        <input type="radio" ng-model="editingRegistree.gender" id="gender" name="gender" class="form-check-input" value="Female">Female
+                    </div>
+                    <div class="form-group">
+                        <label for="phone"> Phone: </label>
+                        <input type="text" id="phone" class="form-control" placeholder="Enter Phone " ng-model="editingRegistree.phone" ng-minlength="10"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email"> Email: </label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter Email " ng-model="editingRegistree.email" required>
+                    </div>
+                    <div class = "form-group">
+                        <label for = "address"> Address: </label>
+                        <input type = "text" class = "form-control" placeholder = "Enter Home Address (#, Street Address, Town, ZIP) " ng-model = "editingRegistree.address">
+                    </div>
+                    <div class="form-group">
+                            <label>Is this your first time coming to Retreat?</label>
+                            <br>
+                            <input type="radio" ng-model="editingRegistree.newcomer" ng-value="true" required>
+                            <label>Yes&nbsp;</label>
+                            <input type="radio" ng-model="editingRegistree.newcomer" ng-value="false">
+                            <label>&nbsp;No</label>
+                        </div>
+                    <div class="form-group">
+                        <label for="center"> Center: </label>
+                        <input type="text" placeholder="Center" ng-model="editingRegistree.centername" id="centerselect" >
+                    </div>
+                    <div class="form-group">
+                        <label for="duration"> Please check which days will you be staying:</label>
+                        <br>
+                        <input type="checkbox" name="fridaycheckbox" ng-model="editingRegistree.durationofstay['friday']">
+                        <label>Friday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="saturdaycheckbox" ng-model="editingRegistree.durationofstay['saturday']">
+                        <label>Saturday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <input type="checkbox" name="sundaycheckbox" ng-model="editingRegistree.durationofstay['sunday']">
+                        <label>Sunday</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Will you be needing housing accommodation?</label>
+                        <br>
+                        <input type="radio" ng-model="editingRegistree.accommodation" ng-value="true" required>
+                        <label>Yes&nbsp;</label>
+                        <input type="radio" ng-model="editingRegistree.accommodation" ng-value="false">
+                        <label>&nbsp;No</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="dietaryrestrictions"> Dietary Restrictions</label>
+                        <br>
+                        <input type="textarea" class="form-control" style="width:100%" name="dietaryrestrictions" ng-model="editingRegistree.dietaryrestrictions"
+                            placeholder="Please enter any dietary restrictions that you have">
+                    </div>
+                    <div class="form-group">
+                        <label for="specialaccommodations">Special Accommodations </label>
+                        <br>
+                        <input type="textarea" class="form-control" style="width:100%" name="specialaccommodations" ng-model="editingRegistree.specialaccommodations"
+                            placeholder="Please enter any special accommodations you need">
+                    </div>
+                </form>
+                <div align="center">
+                <button class = "btn btn-primary" ng-click="editRegistree(editingRegistree)"> <span class = "glyphicon glyphicon-pencil">&nbsp;</span>Edit Registree</button>
+                </div>
+              </md-dialog>
+          </div>
+      </div>
+
+      <div style = "visibility:hidden">
+        <div class = "md-dialog-container" id = "checkinDialog">
+          <md-dialog layout-padding>
+            <form role="form" name = "checkinform" class = "well">
+                <div class="form-group">  
+                    <label for="checkintime"> Check-In Time:</label>
+                    <input type="text" id="checkintime" class="form-control" ng-model="editingRegistree.checkintime">
+                </div>
+                <div class="form-group">  
+                  <label for="checkouttime"> Check-Out Time:</label>
+                  <input type="text" id="checkouttime" class="form-control" ng-model="editingRegistree.checkouttime">
+              </div>
+            </form>
+            <div align="center" >
+              <button class = "btn btn-info" ng-click="alert('Checking out family')"><span class = "glyphicon glyphicons-user"></span>Check Out Family</button>
+            </div>
+            <div align="center">
+              <button class = "btn btn-success" ng-click="checkInRegistree(editingRegistree)"> <span class ="glyphicon glyphicon-time"> </span> Check In {{editingRegistree.name}}</button>
+            </div>
+            <div align="center">
+              <button class = "btn btn-warning" ng-click="checkOutRegistree(editingRegistree)"> <span class ="glyphicon glyphicon-time"> </span> Check Out {{editingRegistree.name}}</button>
+            </div>
+          </md-dialog>
+        </div>
+      </div>
+
+    <div style = "visibility:hidden">
+      <div class = "md-dialog-container" id = "moneyDialog">
+        <md-dialog layout-padding>
+          <form role = "form" name = "moneylogform" class = "well">
+            <div class = "form-group">
+                <label for = "paid">Did the registree pay?</label>
+                    <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid" class="form-check-input" ng-value="true">Yes
+                    <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid" class="form-check-input" ng-value="false">No
+            </div>
+            <div class = "form-group">
+              <label for = "amountpaid"> Amount paid:</label>
+                <input type="text" ng-model="editingRegistree.amountpaid" class = "form-control" placeholder = "Amount Paid">
+            </div>
+
+          </form>
+          <div align = "center">
+            <button class = "btn btn-success" ng-click="moneyRegistree(editingRegistree)"><span class = "glyphicon glyphicon-usd"></span>Confirm Payment</button>
+          </div>
+        </md-dialog>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</body>
+
+</html>

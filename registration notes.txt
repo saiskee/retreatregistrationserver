@@ -1,0 +1,21 @@
+Sailent Retreat:
+Second floor: 2_1 -> 2_12 Each room is two beds, mostly couples
+Third Floor: 3_1 -> 3_30 All single beds
+
+
+Room selection: two drop downs
+
+Family Member Drop Down        Room Drop Down for Assignment per family member
+-Srikanth
+-Darshan
+-Sridhar
+-
+-
+-
+-
+-
+
+registration number: NER2019_01
+
+Age ranges instead of number: 
+If 18-39, do you want to be with the YA group
