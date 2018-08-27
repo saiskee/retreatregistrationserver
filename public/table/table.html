@@ -279,7 +279,7 @@
               </div>
             </form>
             <div align="center" >
-              <button class = "btn btn-info" ng-click="alert('Checking out family')"><span class = "glyphicon glyphicons-user"></span>Check Out Family</button>
+              <button ng-if="editingRegistree.mainregistree = ''" class = "btn btn-info" ng-click="checkOutFamily(editingRegistree)"><span class = "glyphicon glyphicons-user"></span>Check Out Family</button>
             </div>
             <div align="center">
               <button class = "btn btn-success" ng-click="checkInRegistree(editingRegistree)"> <span class ="glyphicon glyphicon-time"> </span> Check In {{editingRegistree.name}}</button>

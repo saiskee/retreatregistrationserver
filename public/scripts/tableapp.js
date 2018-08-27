@@ -77,7 +77,8 @@ tableapp.controller("TableAppController", function(
           durationString.substring(0, durationString.length - 2);
         return durationString;
         break;
-      case "":
+      case "amountpaid":
+        return "$"+content;
         break;
       default:
         if (content == "") {

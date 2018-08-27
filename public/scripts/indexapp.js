@@ -9,6 +9,7 @@ indexapp.controller("ContactController", function($scope, $http) {
   console.clear();
   $scope.registree = new Registree();
   $scope.forms = [];
+  $scope.subMembers = [];
   $scope.validateForms = () => {
     for (let i = 0; i < $scope.forms.length; i++) {
       if ($scope.forms[i].$invalid) {
@@ -17,13 +18,13 @@ indexapp.controller("ContactController", function($scope, $http) {
     }
     return true;
   };
-
+  $scope.tabSelectedIndex = 0;
   $scope.subMembers = [];
   $scope.addMember = () => {
     $scope.subMembers.push(new Registree());
+    $scope.tabSelectedIndex++;
   };
-
-  $scope.title = "List of Users";
+  
   $scope.centers = [
     "None of these",
     "Northborough Center",

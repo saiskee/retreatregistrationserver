@@ -11,7 +11,7 @@ var Todo;
 // configuration=================
 let mongouri = "mongodb://sairam:sairam99@ds133762.mlab.com:33762/retreatregistrationserver";
                 //mongodb://saiskee:sairam99@ds133762.mlab.com:33762/retreatregistrationserver
-mongoose.connect(mongouri); 
+mongoose.connect(mongouri,{useNewUrlParser:true}); 
 
 app.listen(8080);
 console.log("App listening on port 8080");
