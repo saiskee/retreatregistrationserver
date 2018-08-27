@@ -51,18 +51,8 @@ Registree = mongoose.model('Registree', mongoose.Schema({
     amountpaid: {type: Number, default: 0}
 }));
 
-//routes=======================================================================
-
-// api ---------------------------------------------------------------------
-
-app.post('/api/registree', function (req, res) {
-    for (property in req.body){
-        if (req.body[property] == undefined){
-            req.body[property] = null;
-        }
-    }
-    // create a todo, information comes from AJAX request from Angular
-    Registree.create({
+getReqRegistree = function(req){
+    return {
         mainregistree: req.body.mainregistree,
         name: req.body.name,
         age: req.body.age,
@@ -84,17 +74,25 @@ app.post('/api/registree', function (req, res) {
         paid: req.body.paid,
         amountpaid: req.body.amountpaid
 
-    }, function (err, todo) {
+    }
+}
+
+//routes=======================================================================
+
+// api ---------------------------------------------------------------------
+
+app.post('/api/registree', function (req, res) {
+    for (property in req.body){
+        if (req.body[property] == undefined){
+            req.body[property] = null;
+        }
+    }
+    // create a todo, information comes from AJAX request from Angular
+    Registree.create(getReqRegistree(req), function (err, todo) {
 
         if (err) {
             res.send(err);
         }
-        // get and return all the registrees after you create another
-        Registree.find(function (err, registrees) {
-            if (err)
-                res.send(err)
-            res.json(registrees);
-        });
     });
 
 });
@@ -134,36 +132,14 @@ app.put('/api/registree/:registree_id', (req, res) => {
     //         req.body[property] = null;
     //     }
     // }
-    Registree.findByIdAndUpdate(req.params.registree_id, {
-        mainregistree: req.body.mainregistree,
-        name: req.body.name,
-        age: req.body.age,
-        address: req.body.address,
-        formsubmittime: req.body.formsubmittime,
-        email: req.body.email,
-        ssegroup: req.body.ssegroup,
-        ya: req.body.ya,
-        gender: req.body.gender,
-        newcomer: req.body.newcomer,
-        phone: req.body.phone,
-        centername : req.body.centername,
-        durationofstay: req.body.durationofstay,
-        accommodation: req.body.accommodation,
-        dietaryrestrictions: req.body.dietaryrestrictions,
-        specialaccommodations: req.body.specialaccommodations,
-        checkintime: req.body.checkintime,
-        checkouttime: req.body.checkouttime,
-        paid: req.body.paid,
-        amountpaid: req.body.amountpaid
-
-    }
+    Registree.findByIdAndUpdate(req.params.registree_id, getReqRegistree(req)
     ,(err, registree) => {
             if (err) {
                 console.log(" PUT error :", err);
                 res.send(err);
                
             } else{
-                console.log("Registree Updated:", registree)
+                // console.log("Registree Updated:", registree)
             }
         }
     );

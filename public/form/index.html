@@ -22,15 +22,14 @@
 
 </head>
 
-<body ng-app="myApp">
+<body ng-app="myApp" style="background:whitesmoke;">
 
 
     <div class="container">
         <!--Change the border color if input of box is invalid-->
         <style>
             input.ng-invalid {
-
-                background-color: rgb(253, 215, 215)
+                background-color: rgb(253, 215, 215);
             }
         </style>
 
@@ -42,16 +41,14 @@
 
         <div ng-controller="ContactController">
 
-
-
             <md-tabs md-dynamic-height md-border-bottom>
                 <md-tab label="Main Registree">
-                    <md-content class="md-padding">
-                        <form role="form" name="mainform" class="well">
+                    <md-content class="md-padding" style="background-color:whitesmoke">
+                        <form role="form" name="mainform" class="">
 
                             <div class="form-group">
 
-                                <label ng-init="registree.mainregistree = ''" for="name"> Name:</label>
+                                <label  for="name"> Name:</label>
                                 <input type="text" id="name" class="form-control" placeholder="Enter Name " ng-model="registree.name" required>
 
                             </div>
@@ -130,13 +127,13 @@
                             <div class="form-group">
                                 <label for="dietaryrestrictions">Any Dietary Restrictions?</label>
                                 <br>
-                                <input ng-init="registree.dietaryrestrictions = ''" type="textarea" class="form-control" style="width:100%" name="dietaryrestrictions" ng-model="registree.dietaryrestrictions"
+                                <input  type="textarea" class="form-control" style="width:100%" name="dietaryrestrictions" ng-model="registree.dietaryrestrictions"
                                     placeholder="Please enter any dietary restrictions that you have">
                             </div>
                             <div class="form-group">
                                 <label for="specialaccommodations">Will you be needing any special accommodations? (Handicap, etc.) </label>
                                 <br>
-                                <input ng-init="registree.specialaccommodations = ''" type="textarea" class="form-control" style="width:100%" name="specialaccommodations" ng-model="registree.specialaccommodations"
+                                <input  type="textarea" class="form-control" style="width:100%" name="specialaccommodations" ng-model="registree.specialaccommodations"
                                     placeholder="Please enter any special accommodations you need">
                             </div>
                             <br ng-init="forms.push(mainform)">
@@ -211,6 +208,7 @@
                                 <input type="checkbox" name="sundaycheckbox" ng-model="submember.durationofstay['sunday']">
                                 <label>Sunday</label>
                             </div>
+                            
                             <div class="form-group">
                                 <label>Will you be needing housing accommodation?</label>
                                 <br>
