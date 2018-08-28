@@ -35,6 +35,8 @@ tableapp.controller("TableAppController", function(
   $scope.search = {}
   $scope.propertytostring = function(propertyname, content) {
     switch (propertyname) {
+      case "mainregistree":
+        
       case "formsubmittime":
         let date = new Date(content);
         return date.toLocaleString();
