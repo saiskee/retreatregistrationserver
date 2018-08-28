@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <!-- Angular Material requires Angular.js Libraries -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
@@ -23,8 +23,8 @@
   
 </head>
 
-<body>
-  <div ng-app="tableApp"  class="container" style="width:100%;" ng-cloak>
+<body >
+  <div ng-app="tableApp" layout-padding ng-cloak>
 
 
     <div style="text-align:center;color:darkgrey">
@@ -152,11 +152,11 @@
              
                 <td>
                 <div layout="row" class="btn-group">
-                <button ng-click="showEditBox($event,registree)" class = "btn btn-primary"> <span class = "glyphicon glyphicon-pencil"></span></button>
-                <button ng-click="deleteRegistree(registree._id)" class="btn btn-danger"> <span class ="glyphicon glyphicon-remove"></span></button> 
-                <button ng-click="showCheckinBox($event,registree)" class="btn btn-warning"> <span class ="glyphicon glyphicon-time"></span></button>
-                <button ng-click="showMoneyBox($event,registree)" class="btn btn-success"> <span class ="glyphicon glyphicon-usd"></span></button>
-                <button ng-click="" class = "btn"><span class="glyphicon glyphicon-home"></span></button>
+                <button ng-click="showEditBox($event,registree)" class = "btn btn-primary"> <span class = "glyphicon glyphicon-pencil"></span>Edit</button>
+                <button ng-click="deleteRegistree(registree._id)" class="btn btn-danger"> <span class ="glyphicon glyphicon-remove"></span>Delete</button> 
+                <button ng-click="showCheckinBox($event,registree)" class="btn btn-warning"> <span class ="glyphicon glyphicon-time"></span>Check In/Out</button>
+                <button ng-click="showMoneyBox($event,registree)" class="btn btn-success"> <span class ="glyphicon glyphicon-usd"></span>Pay</button>
+                <button ng-click="" class = "btn btn-dark"><span class="glyphicon glyphicon-home">Housing</span></button>
                 </div>
                 </td> 
             </tr>
