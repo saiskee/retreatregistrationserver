@@ -23,6 +23,7 @@ indexapp.controller("ContactController", function($scope, $http) {
   $scope.addMember = () => {
     $scope.subMembers.push(new Registree());
     $scope.tabSelectedIndex++;
+    
   };
   
   $scope.centers = [
