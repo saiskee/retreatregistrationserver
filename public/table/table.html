@@ -279,8 +279,9 @@
                   <input type="text" id="checkouttime" class="form-control" ng-model="editingRegistree.checkouttime">
               </div>
             </form>
-            <div align="center" >
-              <button ng-if="editingRegistree.mainregistreeid == ''" class = "btn btn-info" ng-click="checkOutFamily(editingRegistree)"><span class = "glyphicon glyphicons-user"></span>Check Out Family</button>
+            <div class="btn-group">
+              <button ng-if="editingRegistree.mainregistreeid == ''" class = "btn btn-success" ng-click="checkInFamily(editingRegistree,editingRegistree._id)"><span class = "glyphicon glyphicons-user"></span>Check In Family</button>
+              <button ng-if="editingRegistree.mainregistreeid == ''" class = "btn btn-danger" ng-click="checkOutFamily(editingRegistree,editingRegistree._id)"><span class = "glyphicon glyphicons-user"></span>Check Out Family</button>
             </div>
             <div align="center">
               <button class = "btn btn-success" ng-click="checkInRegistree(editingRegistree)"> <span class ="glyphicon glyphicon-time"> </span> Check In {{editingRegistree.name}}</button>

@@ -113,6 +113,8 @@ tableapp.controller("TableAppController", function(
     })
   }
 
+  
+
   $scope.showCheckinBox = function (event, registree){
     $mdDialog.show(
       {
@@ -161,6 +163,24 @@ tableapp.controller("TableAppController", function(
     $http.put('/api/registree/'+registree._id,registree).then(function(res){
       console.log("Checked in registree:", res)
     });
+  }
+  $scope.checkOutFamily = function(registree,mainregistreeid){
+    $http.get('/api/mainregistree/'+mainregistreeid).then(function(res){
+      for (let i = 0; i < res.data.length; i++){
+        $scope.checkOutRegistree(res.data[i]);
+      }
+      $scope.checkOutRegistree(registree);
+      
+    })
+  }
+  $scope.checkInFamily = function(registree,mainregistreeid){
+    $http.get('/api/mainregistree/'+mainregistreeid).then(function(res){
+      for (let i = 0; i < res.data.length; i++){
+        $scope.checkInRegistree(res.data[i]);
+      }
+      $scope.checkInRegistree(registree);
+      
+    })
   }
 
   $scope.moneyRegistree = function(registree) {

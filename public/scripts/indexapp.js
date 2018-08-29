@@ -8,7 +8,6 @@ var indexapp = angular.module("myApp", ["ngMaterial", "ngMessages"]);
 indexapp.controller("ContactController", function($scope, $http) {
   console.clear();
   $scope.registree = new Registree();
-  $scope.registree.family=[];
   $scope.forms = [];
   $scope.subMembers = [];
   $scope.validateForms = () => {

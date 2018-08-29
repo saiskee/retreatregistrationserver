@@ -11,7 +11,11 @@ var Todo;
 // configuration=================
 let mongouri = "mongodb://sairam:sairam99@ds133762.mlab.com:33762/retreatregistrationserver";
                 //mongodb://saiskee:sairam99@ds133762.mlab.com:33762/retreatregistrationserver
-mongoose.connect(mongouri,{useNewUrlParser:true}); 
+mongoose.connect(mongouri,{useNewUrlParser:true}, function(error){
+    if (error){
+    console.log("Connection to ",mongouri,"failed");
+    }
+}); 
 
 app.listen(8080);
 console.log("App listening on port 8080");
@@ -52,7 +56,7 @@ Registree = mongoose.model('Registree', mongoose.Schema({
     amountpaid: {type: Number, default: 0}
 }));
 
-getReqRegistree = function(req){
+getReqParamsRegistree = function(req){
     return {
         mainregistreeid :req.body.mainregistreeid,
         mainregistree: req.body.mainregistree,
@@ -85,7 +89,7 @@ getReqRegistree = function(req){
 
 app.post('/api/registree', function (req, res) {
     // create a registree, information comes from AJAX request from Angular
-    Registree.create(getReqRegistree(req), function (err,registree) {
+    Registree.create(getReqParamsRegistree(req), function (err,registree) {
 
         if (err) {
             res.send(err);
@@ -95,6 +99,11 @@ app.post('/api/registree', function (req, res) {
     });
 
 });
+app.get('/api/mainregistree/:mainregistreeid', function(req,res){
+    Registree.find({mainregistreeid: req.params.mainregistreeid},function(err, registrees){
+        res.json(registrees);
+    });
+})
 
 app.get('/api/registree/', function (req, res) {
     Registree.find(function (err, registrees) {
@@ -131,7 +140,7 @@ app.put('/api/registree/:registree_id', (req, res) => {
     //         req.body[property] = null;
     //     }
     // }
-    Registree.findByIdAndUpdate(req.params.registree_id, getReqRegistree(req)
+    Registree.findByIdAndUpdate(req.params.registree_id, getReqParamsRegistree(req)
     ,(err, registree) => {
             if (err) {
                 console.log(" PUT error :", err);
