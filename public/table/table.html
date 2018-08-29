@@ -170,7 +170,7 @@
                 <form role="form" name="mainform" class="well">
                     
                     <div class="form-group">
-                        <label for= "mainregistree"> Parent Registree: </label>
+                        <label for= "mainregistree"> Parent test: </label>
                         <input type = "text" class = "form-control" placeholder = "Parent Registree" ng-model = "editingRegistree.mainregistree">
                     </div> 
                     <div class="form-group">  
@@ -186,22 +186,22 @@
                     <div class="form-group">
                         <label>Which group SSE are you in?</label>
                         <br>
-                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="">Not SSE
-                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Pre-SSE">Pre-SSE
-                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 1">Group 1
-                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 2">Group 2
-                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 3">Group 3
-                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 4">Group 4
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup"  value="">Not SSE
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup"  value="Pre-SSE">Pre-SSE
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 1">Group 1
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 2">Group 2
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 3">Group 3
+                        <input type="radio" ng-model="editingRegistree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 4">Group 4
                     </div>
                     <div class="form-group" >
                         <label>Are you a YA?</label>
-                        <input type="radio" ng-model="editingRegistree.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="true">Yes
-                        <input type="radio" ng-model="editingRegistree.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="false">No
+                        <input type="radio" ng-model="editingRegistree.ya" id="ssegroup" name="ssegroup"  ng-value="true">Yes
+                        <input type="radio" ng-model="editingRegistree.ya" id="ssegroup" name="ssegroup"  ng-value="false">No
                     </div>
                     <div class="form-group">
                         <label for="gender"> Gender:</label>
-                        <input type="radio" ng-model="editingRegistree.gender" id="gender" name="gender" class="form-check-input" value="Male">Male
-                        <input type="radio" ng-model="editingRegistree.gender" id="gender" name="gender" class="form-check-input" value="Female">Female
+                        <input type="radio" ng-model="editingRegistree.gender" id="gender" name="gender"  value="Male">Male
+                        <input type="radio" ng-model="editingRegistree.gender" id="gender" name="gender"  value="Female">Female
                     </div>
                     <div class="form-group">
                         <label for="phone"> Phone: </label>
@@ -280,7 +280,7 @@
               </div>
             </form>
             <div align="center" >
-              <button ng-if="editingRegistree.mainregistree = ''" class = "btn btn-info" ng-click="checkOutFamily(editingRegistree)"><span class = "glyphicon glyphicons-user"></span>Check Out Family</button>
+              <button ng-if="editingRegistree.mainregistreeid == ''" class = "btn btn-info" ng-click="checkOutFamily(editingRegistree)"><span class = "glyphicon glyphicons-user"></span>Check Out Family</button>
             </div>
             <div align="center">
               <button class = "btn btn-success" ng-click="checkInRegistree(editingRegistree)"> <span class ="glyphicon glyphicon-time"> </span> Check In {{editingRegistree.name}}</button>
@@ -298,8 +298,8 @@
           <form role = "form" name = "moneylogform" class = "well">
             <div class = "form-group">
                 <label for = "paid">Did the registree pay?</label>
-                    <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid" class="form-check-input" ng-value="true">Yes
-                    <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid" class="form-check-input" ng-value="false">No
+                    <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid"  ng-value="true">Yes
+                    <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid"  ng-value="false">No
             </div>
             <div class = "form-group">
               <label for = "amountpaid"> Amount paid:</label>

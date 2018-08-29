@@ -9,6 +9,7 @@ tableapp.controller("TableAppController", function(
   $scope.registrees = [];
   // $scope.registreeschema = ["Main Registree","Name", "Age", "Email", "SSE Group", "YA", "Gender", "Phone Number", "Center", "Center Address", "Stay Duration", "Accomodation", "Dietary Restrictions", "Special Accommodations"]
   $scope.registreeschema = [
+    { name: "Main Registree Id", propertyname: "mainregistreeid", show: true},
     { name: "Main Registree", propertyname: "mainregistree", show: true },
     { name: "Name", propertyname: "name", show: true },
     { name: "Form Submit Time", propertyname: "formsubmittime", show: true },
@@ -35,8 +36,6 @@ tableapp.controller("TableAppController", function(
   $scope.search = {}
   $scope.propertytostring = function(propertyname, content) {
     switch (propertyname) {
-      case "mainregistree":
-        
       case "formsubmittime":
         let date = new Date(content);
         return date.toLocaleString();

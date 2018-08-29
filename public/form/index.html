@@ -79,27 +79,27 @@
                             <div class="form-group" ng-if="!registree.ya && registree.age > 5 && registree.age <= 18">
                                 <label>Which group SSE are you in?</label>
                                 <br>
-                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value=""><label>Not
+                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup"  value=""><label>Not
                                 SSE</label>
-                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Pre-SSE"><label>Pre-SSE</label>
-                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 1">Group
+                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup"  value="Pre-SSE"><label>Pre-SSE</label>
+                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 1">Group
                                 1
-                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 2">Group
+                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 2">Group
                                 2
-                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 3">Group
+                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 3">Group
                                 3
-                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 4">Group
+                                <input type="radio" ng-model="registree.ssegroup" id="ssegroup" name="ssegroup"  value="Group 4">Group
                                 4
                             </div>
                             <div class="form-group" ng-if="!registree.ssegroup && registree.age >= 17 && registree.age <=40">
                                 <label>Are you a YA?</label>
-                                <input type="radio" ng-model="registree.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="true">Yes
-                                <input type="radio" ng-model="registree.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="false">No
+                                <input type="radio" ng-model="registree.ya" id="ssegroup" name="ssegroup"  ng-value="true"><label>Yes</label>
+                                <input type="radio" ng-model="registree.ya" id="ssegroup" name="ssegroup"  ng-value="false"><label>No</label>
                             </div>
                             <div class="form-group">
                                 <label for="gender"> Gender:</label>
-                                <input type="radio" ng-model="registree.gender" id="gender" name="gender" class="form-check-input" value="Male">Male
-                                <input type="radio" ng-model="registree.gender" id="gender" name="gender" class="form-check-input" value="Female">Female
+                                <input type="radio" ng-model="registree.gender" id="gender" name="gender"  value="Male"><label>Male</label>
+                                <input type="radio" ng-model="registree.gender" id="gender" name="gender"  value="Female"><label>Female</label>
                             </div>
                             <div class="form-group">
                                 <label for="phone"> Phone: </label>
@@ -144,9 +144,9 @@
                                 <label>Will you be needing housing accommodation?</label>
                                 <br>
                                 <input type="radio" ng-model="registree.accommodation" ng-value="true" required>
-                                <label>Yes&nbsp;</label>
+                                <label>Yes</label>
                                 <input type="radio" ng-model="registree.accommodation" ng-value="false">
-                                <label>&nbsp;No</label>
+                                <label>No</label>
                             </div>
                             <div class="form-group">
                                 <label for="dietaryrestrictions">Any Dietary Restrictions?</label>
@@ -191,27 +191,27 @@
                             <div class="form-group" ng-if="!submember.ya && submember.age > 5 && submember.age <= 18">
                                 <label>Which group SSE are you in?</label>
                                 <br>
-                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="">Not
+                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup"  value="">Not
                                 SSE
-                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Pre-SSE">Pre-SSE
-                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 1">Group
+                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup"  value="Pre-SSE">Pre-SSE
+                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup"  value="Group 1">Group
                                 1
-                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 2">Group
+                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup"  value="Group 2">Group
                                 2
-                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 3">Group
+                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup"  value="Group 3">Group
                                 3
-                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup" class="form-check-input" value="Group 4">Group
+                                <input type="radio" ng-model="submember.ssegroup" id="ssegroup" name="ssegroup"  value="Group 4">Group
                                 4
                             </div>
                             <div class="form-group" ng-if="!submember.ssegroup && submember.age >= 17 && submember.age <=40">
                                 <label>Are you a YA?</label>
-                                <input type="radio" ng-model="submember.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="true">Yes
-                                <input type="radio" ng-model="submember.ya" id="ssegroup" name="ssegroup" class="form-check-input" ng-value="false">No
+                                <input type="radio" ng-model="submember.ya" id="ssegroup" name="ssegroup"  ng-value="true">Yes
+                                <input type="radio" ng-model="submember.ya" id="ssegroup" name="ssegroup"  ng-value="false">No
                             </div>
                             <div class="form-group">
                                 <label for="gender"> Gender:</label>
-                                <input type="radio" ng-model="submember.gender" id="gender" name="gender" class="form-check-input" value="Male" required>Male
-                                <input type="radio" ng-model="submember.gender" id="gender" name="gender" class="form-check-input" value="Female">Female
+                                <input type="radio" ng-model="submember.gender" id="gender" name="gender"  value="Male" required><label>Male</label>
+                                <input type="radio" ng-model="submember.gender" id="gender" name="gender"  value="Female"><label>Female</label>
                             </div>
                             <div class="form-group">
                                 <label for="phone"> Phone: </label>
@@ -244,9 +244,9 @@
                                 <label>Will you be needing housing accommodation?</label>
                                 <br>
                                 <input type="radio" ng-model="submember.accommodation" ng-value="true" required>
-                                <label>Yes&nbsp;</label>
+                                <label>Yes</label>
                                 <input type="radio" ng-model="submember.accommodation" ng-value="false">
-                                <label>&nbsp;No</label>
+                                <label>No</label>
                             </div>
                             <div class="form-group">
                                 <label for="dietaryrestrictions">Any Dietary Restrictions?</label>

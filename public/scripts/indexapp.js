@@ -8,6 +8,7 @@ var indexapp = angular.module("myApp", ["ngMaterial", "ngMessages"]);
 indexapp.controller("ContactController", function($scope, $http) {
   console.clear();
   $scope.registree = new Registree();
+  $scope.registree.family=[];
   $scope.forms = [];
   $scope.subMembers = [];
   $scope.validateForms = () => {
@@ -49,21 +50,27 @@ indexapp.controller("ContactController", function($scope, $http) {
 
   $scope.saveRegistrees = function(registree) {
     if (registree == null || registree == angular.undefined) return;
-
+    let mainregistreeid = 'test';
     registree.formsubmittime = Date.now();
-    console.log(registree);
-    $http.post("/api/registree", registree).then(res => {
-      /*console.log(res)*/
-    });
-
-    for (let i = 0; i < $scope.subMembers.length; i++) {
+    //console.log(registree);
+    $http.post("/api/registree", registree).then((res) => {
+     
+      mainregistreeid = res.data;
+     for (let i = 0; i < $scope.subMembers.length; i++) {
       $scope.subMembers[i].formsubmittime = Date.now();
-
+      $scope.subMembers[i].mainregistreeid = mainregistreeid;
+      console.log("mainregistree _id:",mainregistreeid);
       $http.post("/api/registree", $scope.subMembers[i]).then(function(res) {
         //console.log(res);
       });
     }
     $scope.registree = {};
     $scope.subMembers = {};
+    
+    },(err)=> {
+      console.log("Post Error:" ,err);
+    });
+
+    
   };
 });

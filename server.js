@@ -29,6 +29,7 @@ app.use(methodOverride());
 
 // define model =================
 Registree = mongoose.model('Registree', mongoose.Schema({
+    mainregistreeid: {type: String, default: ''},
     mainregistree: {type: String, default:''},
     name:  {type: String, default:''},
     address:  {type: String, default:''},
@@ -53,6 +54,7 @@ Registree = mongoose.model('Registree', mongoose.Schema({
 
 getReqRegistree = function(req){
     return {
+        mainregistreeid :req.body.mainregistreeid,
         mainregistree: req.body.mainregistree,
         name: req.body.name,
         age: req.body.age,
@@ -82,16 +84,13 @@ getReqRegistree = function(req){
 // api ---------------------------------------------------------------------
 
 app.post('/api/registree', function (req, res) {
-    for (property in req.body){
-        if (req.body[property] == undefined){
-            req.body[property] = null;
-        }
-    }
-    // create a todo, information comes from AJAX request from Angular
-    Registree.create(getReqRegistree(req), function (err, todo) {
+    // create a registree, information comes from AJAX request from Angular
+    Registree.create(getReqRegistree(req), function (err,registree) {
 
         if (err) {
             res.send(err);
+        }else{
+            res.send(registree._id); //send registree._id for mainregistree updating purposes
         }
     });
 
