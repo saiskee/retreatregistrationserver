@@ -31,7 +31,7 @@ app.use(methodOverride());
 // listen (start app with node server.js) ======================================
 
 
-// define model =================
+// define Registree and Room =================
 Registree = mongoose.model('Registree', mongoose.Schema({
     mainregistreeid: {type: String, default: ''},
     mainregistree: {type: String, default:''},
@@ -57,6 +57,7 @@ Registree = mongoose.model('Registree', mongoose.Schema({
 }));
 
 getReqParamsRegistree = function(req){
+   
     return {
         mainregistreeid :req.body.mainregistreeid,
         mainregistree: req.body.mainregistree,
@@ -83,12 +84,39 @@ getReqParamsRegistree = function(req){
     }
 }
 
+Room = mongoose.model('Room', mongoose.Schema({
+    roomnumber: {type:String, default: ''},
+    floornumber: {type:String, default: ''},
+    building: {type: String, default: ''},
+    handicap: {type: Boolean, default: false},
+    beds: {type: Number, default: 0},
+    maxoccupancy: {type: Number, default: 0},
+    occupants: {type: Object, default: {}},
+    additionalnotes: {type: String, default: ''}
+}));
+
+getReqParamsRoom = function(req){
+
+    return{
+    roomnumber: req.body.roomnumber,
+    floornumber: req.body.floornumber,
+    building: req.body.building,
+    handicap: req.body.handicap,
+    beds: req.body.beds,
+    maxoccupancy: req.body.maxoccupancy,
+    occupants: req.body.occupants,
+    additionalnotes: req.body.additionalnotes
+
+    }
+}
 //routes=======================================================================
 
 // api ---------------------------------------------------------------------
 
+// registree api -------------------------------------------------------------
+// create a registree, information comes from AJAX request from Angular
 app.post('/api/registree', function (req, res) {
-    // create a registree, information comes from AJAX request from Angular
+ 
     Registree.create(getReqParamsRegistree(req), function (err,registree) {
 
         if (err) {
@@ -96,15 +124,12 @@ app.post('/api/registree', function (req, res) {
         }else{
             res.send(registree._id); //send registree._id for mainregistree updating purposes
         }
+    
     });
 
 });
-app.get('/api/mainregistree/:mainregistreeid', function(req,res){
-    Registree.find({mainregistreeid: req.params.mainregistreeid},function(err, registrees){
-        res.json(registrees);
-    });
-})
 
+// get a list of all the registrees
 app.get('/api/registree/', function (req, res) {
     Registree.find(function (err, registrees) {
         if (err) {
@@ -116,8 +141,15 @@ app.get('/api/registree/', function (req, res) {
     });
 });
 
+// find registree by id :mainregistreeid, passed as url argument in request
+app.get('/api/mainregistree/:mainregistreeid', function(req,res){
+    Registree.find({mainregistreeid: req.params.mainregistreeid},function(err, registrees){
+        res.json(registrees);
+    });
+});
 
 
+// delete a registree matching with registree_id in request
 app.delete('/api/registree/:registree_id', function (req, res) {
     Registree.remove({
         _id: req.params.registree_id
@@ -130,16 +162,11 @@ app.delete('/api/registree/:registree_id', function (req, res) {
             res.json(registrees)
         })
     })
-})
+});
 
 
-//update a todo
+//update a registree matching with registree_id in request
 app.put('/api/registree/:registree_id', (req, res) => {
-    // for (property in req.body){
-    //     if (req.body[property] == undefined){
-    //         req.body[property] = null;
-    //     }
-    // }
     Registree.findByIdAndUpdate(req.params.registree_id, getReqParamsRegistree(req)
     ,(err, registree) => {
             if (err) {
@@ -153,21 +180,85 @@ app.put('/api/registree/:registree_id', (req, res) => {
     );
 });
 
+//room api -----------------------------------------------------------------
+        //create a room
+app.post('/api/room', function (req,res){
+
+    Room.create(getReqParamsRoom(req), function(err,room){
+        if (err){
+
+        }else{
+            res.send(room);
+        }
+    });
+});
+
+// get a list of all the registrees
+        //retrieve all rooms
+app.get('/api/room/', function (req, res) {
+    Room.find(function (err, rooms) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.json(rooms);
+        }
+    });
+});
+
+// delete a room matching with room_id in request
+app.delete('/api/room/:room_id', function (req, res) {
+    Room.remove({_id: req.params.room_id}, 
+        function (err, room){
+        if (err)
+            res.send(err);
+        Room.find((err, rooms) => {
+            if (err){
+                res.send(err);
+            }
+            res.json(rooms);
+        });
+    });
+});
 
 
+//update a room matching with room_id in request
+app.put('/api/room/:room_id', function (req, res) {
+    Room.findByIdAndUpdate(req.params.room_id, getReqParamsRoom(req), 
+    function (err, room) {
+            if (err) {
+                console.log(" ROOM PUT error :", err);
+                res.send(err);
+               
+            } else{
+            }
+        }
+    );
+});
 
 // application -------------------------------------------------------------
 
+app.get('/',function(req,res){
+    res.sendfile('./public/form/form.html');
+})
+
 app.get('/api/table', function(req,res){
     res.sendfile('./public/table/table.html')
+})
+app.get('/api/table1', function(req,res){
+    res.sendfile('./public/table/table1.html')
 })
 app.get('/scripts/:script', (req,res) => {
     res.sendfile('./public/scripts/'+req.params.script);
 })
 
 app.get('/form', function (req, res) {
-    res.sendfile('./public/form/index.html'); 
+    res.sendfile('./public/form/form.html'); 
     // load the single view file (angular will handle the page changes on the front-end)
 });
+
+app.get('/housing', function (req, res){
+    res.sendfile('./public/housing/housing.html');
+})
 
 

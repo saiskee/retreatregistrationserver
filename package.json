@@ -1,7 +1,7 @@
 {
-  "name": "node-todo",
-  "version": "0.0.0",
-  "description": "Simple todo application.",
+  "name": "retreatregistrationserver",
+  "version": "0.0.1",
+  "description": "Retreat Registration CMS",
   "main": "server.js",
   "author": "Scotch",
   "dependencies": {

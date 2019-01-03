@@ -3,10 +3,9 @@ class Registree{
         this.mainregistree,this.name,this.formsubmittime,this.age,this.email,this.newcomer,this.address,this.ssegroup,this.ya,this.gender,this.phone,this.center,this.durationofstay,this.accommmodation,this.dietaryrestrictions,this.specialaccommodations,this.checkintime,this.checkouttime,this.paid,this.amountpaid = '';
     }
 }
-var indexapp = angular.module("myApp", ["ngMaterial", "ngMessages"]);
+var formapp = angular.module("FormApp", ["ngMaterial", "ngMessages"]);
 
-indexapp.controller("ContactController", function($scope, $http) {
-  console.clear();
+formapp.controller("FormController", function($scope, $http) {
   $scope.registree = new Registree();
   $scope.forms = [];
   $scope.subMembers = [];
@@ -49,9 +48,8 @@ indexapp.controller("ContactController", function($scope, $http) {
 
   $scope.saveRegistrees = function(registree) {
     if (registree == null || registree == angular.undefined) return;
-    let mainregistreeid = 'test';
     registree.formsubmittime = Date.now();
-    //console.log(registree);
+
     $http.post("/api/registree", registree).then((res) => {
      
       mainregistreeid = res.data;
@@ -63,8 +61,8 @@ indexapp.controller("ContactController", function($scope, $http) {
         //console.log(res);
       });
     }
-    $scope.registree = {};
-    $scope.subMembers = {};
+    // $scope.registree = {};
+    // $scope.subMembers = {};
     
     },(err)=> {
       console.log("Post Error:" ,err);
