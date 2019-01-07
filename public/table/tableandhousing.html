@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Retreat Data Table</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+
+    <script type="text/javascript" src="/scripts/thapp.js"> </script>
+
+</head>
+
+<body>
+    <style>
+        md-tabs.md-no-animation md-tab-content {
+            transition:none;
+        }
+    </style>
+    <div ng-app="thApp" ng-cloak>
+        <md-content>
+            <md-tabs md-dynamic-height md-border-bottom class="md-no-animation">
+
+        <!-- ====================REGISTRATION CONTROLLER================= -->
+
+        <md-tab label="Registration">
+                <md-content class="md-padding">
+        <div style="text-align:center;color:darkgrey">
+        </div>
+        <div ng-controller="TableAppController" layout-padding>
+            <div style="float:left;width:52%">
+                <h4 ng-init="getRegistrees();getRooms()">
+                    <b>Registered Users</b>
+                </h4>
+
+                <div class='btn-group'>
+                    <button type="button" class="btn btn-sm btn-success" ng-click="getRegistrees()">Refresh Users</button>
+                    <button type="button" class="btn btn-sm btn-info" ng-click="downloadData()"> <span class="glyphicon glyphicon-share"></span> Download Data </button>
+                    <input class="form-control-file btn-sm" type="file" id="housingUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                    <button type="button" class="btn btn-sm btn-danger " ng-click="showImportBox($event)">Import Data</button>
+                </div>
+
+
+
+
+                <div>
+                    <input type="text" class="form-control" placeholder="Search for Registree" ng-model="mainsearch">
+
+                    <h1 ng-if="!registrees.length" style="text-align:center;color:darkred">No registered users</h1>
+                    <div style="overflow-y:scroll;height:65vh;width:100%">
+
+                        <table ng-if="registrees.length" class="table table-striped table-bordered table-responsive">
+
+                            <thead>
+                                <tr>
+
+                                    <th>Parent</th>
+
+                                    <th> Name</th>
+
+                                    <th>Actions</th>
+
+                                    <!-- <th ng-repeat="schema in registreeschema" ng-if="schema.show">
+                <input type="text" ng-model="search[schema.propertyname]" placeholder="Search {{schema.name}}">
+                <span ng-bind="schema.name"></span>
+              </th> -->
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr ng-repeat="registree in registrees | filter: mainsearch">
+                                    <!-- <td ng-repeat="schema in registreeschema" style="font-size: medium;"ng-if="schema.show" ng-bind="propertytostring(schema.propertyname,registree[schema.propertyname])"> -->
+                                    <td ng-bind="registree.mainregistree"></td>
+                                    <td ng-bind="registree.name"> </td>
+                                    
+
+                                    <td>
+                                        <div layout="row" class="btn-group">
+                                            <button ng-click="showEditBox($event,registree)" class="btn btn-primary btn-sm">
+                                                <span class="glyphicon glyphicon-pencil"></span>Edit</button>
+                                            <button ng-click="deleteRegistree(registree._id)" class="btn btn-danger btn-sm">
+                                                <span class="glyphicon glyphicon-remove"></span>Delete</button>
+                                            <button ng-click="showCheckinBox($event,registree)" class="btn btn-warning btn-sm">
+                                                <span class="glyphicon glyphicon-time"></span>Check
+                                                In/Out
+                                            </button>
+                                            <button ng-click="showMoneyBox($event,registree)" class="btn btn-success btn-sm">
+                                                <span class="glyphicon glyphicon-usd"></span>Pay</button>
+                                            <!-- Show housing dialog only for "Parents" -->
+                                            <button ng-if="registree.mainregistree == ''" ng-click="showHousingBox($event,registree)"
+                                                class="btn btn-dark btn-sm">Housing</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div style="float:right;width:48%;height:90vh;overflow-y:scroll;background-color: whitesmoke">
+
+                <div>
+
+                    <form role="form" name="mainform" class="well">
+
+                        <div class="form-group">
+                            <label for="mainregistree"> Parent: </label>
+                            <input type="text" class="form-control" placeholder="Parent Registree" ng-model="editingRegistree.mainregistree">
+                        </div>
+                        <div class="form-group">
+                            <label for="name"> Name:</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter Name " ng-model="editingRegistree.name">
+                        </div>
+                        <div class="form-group">
+                            <label for="age"> Age:</label>
+                            <span>
+                                <input type="number" id="age" class="form-control" ng-model="editingRegistree.age">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label>Which group SSE are you in?</label>
+                            <br>
+                            <input type="radio" ng-model="editingRegistree.ssegroup"  name="ssegroup" value=""/>Not SSE
+                            <input type="radio" ng-model="editingRegistree.ssegroup"  name="ssegroup" value="Pre-SSE">Pre-SSE
+                            <input type="radio" ng-model="editingRegistree.ssegroup"  name="ssegroup" value="Group 1">Group 1
+                            <input type="radio" ng-model="editingRegistree.ssegroup"  name="ssegroup" value="Group 2">Group 2
+                            <input type="radio" ng-model="editingRegistree.ssegroup"  name="ssegroup" value="Group 3">Group 3
+                            <input type="radio" ng-model="editingRegistree.ssegroup"  name="ssegroup" value="Group 4">Group 4
+                        </div>
+                        <div class="form-group">
+                            <label>Are you a YA?</label>
+                            <input type="radio" ng-model="editingRegistree.ya"  name="ssegroup" ng-value="true">Yes
+                            <input type="radio" ng-model="editingRegistree.ya"  name="ssegroup" ng-value="false">No
+                        </div>
+                        <div class="form-group">
+                            <label for="gender"> Gender:</label>
+                            <input type="radio" ng-model="editingRegistree.gender"  name="gender" value="Male">Male
+                            <input type="radio" ng-model="editingRegistree.gender"  name="gender" value="Female">Female
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"> Phone: </label>
+                            <input type="text" id="phone" class="form-control" placeholder="Enter Phone " ng-model="editingRegistree.phone" ng-minlength="10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"> Email: </label>
+                            <input type="email" id="email" class="form-control" placeholder="Enter Email " ng-model="editingRegistree.email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address"> Address: </label>
+                            <input type="text" class="form-control" placeholder="Enter Home Address (#, Street Address, Town, ZIP) " ng-model="editingRegistree.address">
+                        </div>
+                        <div class="form-group">
+                            <label>Is this your first time coming to Retreat?</label>
+                            <br>
+                            <input type="radio" ng-model="editingRegistree.newcomer" ng-value="true" required>
+                            <label>Yes&nbsp;</label>
+                            <input type="radio" ng-model="editingRegistree.newcomer" ng-value="false">
+                            <label>&nbsp;No</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="center"> Center: </label>
+                            <input type="text" placeholder="Center" ng-model="editingRegistree.centername" id="centerselect">
+                        </div>
+                        <div class="form-group" ng-if="bhajan">
+                                <label for="bhajanlist">List 3 Bhajans you would like to offer:</label>
+                                <br>
+                                <input type="textarea" class="form-control" style="width:100%" name="bhajanlist" ng-model="editingRegistree.bhajanlist"
+                                    placeholder="Please enter 3 bhajans here">
+                        </div>
+                        <div class="form-group">
+                            <label for="duration"> Please check which days will you be staying:</label>
+                            <br>
+                            <input type="checkbox" name="fridaycheckbox" ng-model="editingRegistree.durationofstay['friday']">
+                            <label>Friday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input type="checkbox" name="saturdaycheckbox" ng-model="editingRegistree.durationofstay['saturday']">
+                            <label>Saturday&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input type="checkbox" name="sundaycheckbox" ng-model="editingRegistree.durationofstay['sunday']">
+                            <label>Sunday</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Will you be needing housing accommodation?</label>
+                            <br>
+                            <input type="radio" ng-model="editingRegistree.accommodation" ng-value="true" required>
+                            <label>Yes&nbsp;</label>
+                            <input type="radio" ng-model="editingRegistree.accommodation" ng-value="false">
+                            <label>&nbsp;No</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="dietaryrestrictions"> Dietary Restrictions</label>
+                            <br>
+                            <input type="textarea" class="form-control" style="width:100%" name="dietaryrestrictions"
+                                ng-model="editingRegistree.dietaryrestrictions" placeholder="Please enter any dietary restrictions that you have">
+                        </div>
+                        <div class="form-group">
+                            <label for="specialaccommodations">Special Accommodations </label>
+                            <br>
+                            <input type="textarea" class="form-control" style="width:100%" name="specialaccommodations"
+                                ng-model="editingRegistree.specialaccommodations" placeholder="Please enter any special accommodations you need">
+                        </div>
+                    </form>
+                    <div style="align-content:center">
+                        <button class="btn btn-success" ng-click="createRegistree(editingRegistree)">Create New
+                            Registree</button>
+                        <button class="btn btn-primary" ng-click="editRegistree(editingRegistree)">Edit Registree</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="visibility:hidden">
+                <div class="md-dialog-container" id="checkinDialog">
+                    <md-dialog layout-padding>
+                        <form role="form" name="checkinform" class="well">
+                            <div class="form-group">
+                                <label for="checkintime"> Check-In Time:</label>
+                                <input type="text" id="checkintime" class="form-control" ng-model="editingRegistree.checkintime">
+                            </div>
+                            <div class="form-group">
+                                <label for="checkouttime"> Check-Out Time:</label>
+                                <input type="text" id="checkouttime" class="form-control" ng-model="editingRegistree.checkouttime">
+                            </div>
+                        </form>
+                        <div class="btn-group">
+                            <button ng-if="editingRegistree.mainregistreeid == ''" class="btn btn-success" ng-click="checkInFamily(editingRegistree,editingRegistree._id)"><span
+                                    class="glyphicon glyphicons-user"></span>Check In Family</button>
+                            <button ng-if="editingRegistree.mainregistreeid == ''" class="btn btn-danger" ng-click="checkOutFamily(editingRegistree,editingRegistree._id)"><span
+                                    class="glyphicon glyphicons-user"></span>Check Out Family</button>
+                        </div>
+                        <div style="align-content:center">
+                            <button class="btn btn-success" ng-click="checkInRegistree(editingRegistree)"> <span class="glyphicon glyphicon-time">
+                                </span> Check In {{editingRegistree.name}}</button>
+                        </div>
+                        <div style="align-content:center">
+                            <button class="btn btn-warning" ng-click="checkOutRegistree(editingRegistree)"> <span class="glyphicon glyphicon-time">
+                                </span> Check Out {{editingRegistree.name}}</button>
+                        </div>
+                    </md-dialog>
+                </div>
+            </div>
+
+            <div style="visibility:hidden">
+                <div class="md-dialog-container" id="moneyDialog">
+                    <md-dialog layout-padding>
+                        <form role="form" name="moneylogform" class="well">
+                            <div class="form-group">
+                                <label for="paid">Did the registree pay?</label>
+                                <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid"
+                                    ng-value="true">Yes
+                                <input type="radio" ng-model="editingRegistree.paid" id="moneypaid" name="moneypaid"
+                                    ng-value="false">No
+                            </div>
+                            <div class="form-group">
+                                <label for="amountpaid"> Amount paid:</label>
+                                <input type="text" ng-model="editingRegistree.amountpaid" class="form-control"
+                                    placeholder="Amount Paid">
+                            </div>
+
+                        </form>
+                        <div style="align-content:center">
+                            <button class="btn btn-success" ng-click="moneyRegistree(editingRegistree)"><span class="glyphicon glyphicon-usd"></span>Confirm
+                                Payment
+                            </button>
+                        </div>
+                    </md-dialog>
+                </div>
+            </div>
+
+            <div style="visibility:hidden">
+                <div class="md-dialog-container" id="housingDialog">
+                    <md-dialog style="max-width:98vw;width:100vw;height:90vh;max-height:100vh" layout-padding>
+                        <div class="layout-padding">
+                            <div style="float:left;width:48%;">
+                                <input type="text" class="form-control" placeholder="Search for Members of Family"
+                                    ng-model="familysearch">
+
+                                <h1 ng-if="!family.length" style="text-align:center;color:darkred">No Registered Family</h1>
+                                <div style="overflow-y:scroll;height:65vh;width:100%">
+
+                                    <table ng-if="rooms.length" class="table table-striped table-bordered table-responsive">
+
+                                        <thead>
+                                            <tr>
+                                                <th>Actions</th>
+                                                <th>Room</th>
+                                                <th>Name</th>
+
+                                                <th>Age</th>
+
+
+
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr ng-repeat="member in family track by $index">
+                                                <td>
+                                                    <div layout="row" class="btn-group">
+                                                        <md-checkbox ng-click="toggle(member,selectedFamily)">Select</md-checkbox>
+                                                        <!-- <button ng-click="print(member)" class="btn btn-danger btn-sm"> <span class="glyphicon glyphicon-remove"></span>Print</button> -->
+                                                    </div>
+                                                </td>
+                                                <td ng-bind="propertytostring('room',member.room)"></td>
+                                                <td ng-bind="member.name"></td>
+                                                <td ng-bind="member.age"> </td>
+
+
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="float:right;width:48%;">
+                                <input type="text" class="form-control" placeholder="Search for Rooms" ng-model="mainsearch">
+
+                                <h1 ng-if="!rooms.length" style="text-align:center;color:darkred">No Registered Rooms</h1>
+                                <div style="overflow-y:scroll;height:65vh;width:100%">
+
+                                    <table ng-if="rooms.length" class="table table-striped table-bordered table-responsive">
+
+                                        <thead>
+                                            <tr>
+                                                <th>Room DBID</th>
+                                                <th>Room #</th>
+                                                <th>Occupants</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr ng-repeat="room in rooms track by $index">
+                                                <td ng-bind="room._id"></td>
+                                                <td ng-bind="room.roomnumber"></td>
+                                                <td ng-bind="room.occupants"> </td>
+                                                <td>
+                                                    <div layout="row" class="btn-group">
+
+                                                        <button ng-click="assignRoom(room)" class="btn btn-danger btn-sm">
+                                                            <span class="glyphicon glyphicon-remove"></span>Assign</button>
+                                                        <button ng-click="print(room)" class="btn btn-danger btn-sm">
+                                                            <span class="glyphicon glyphicon-remove"></span>Print</button>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success" ng-click="updateRooms()">Update Room Assignment</button>
+                    </md-dialog>
+                </div>
+            </div>
+            
+            <div style="visibility:hidden">
+                <div class="md-dialog-container" id="importRegistrationDialog">
+                    <md-dialog style="max-width:98vw;width:100vw;height:90vh;max-height:100vh" layout-padding>
+                        
+                            <input type="text" class="form-control" placeholder="Search for Import Data"
+                                ng-model="importDataSearch">
+        
+                            <div style="overflow-y:scroll;width:100%">
+                                <h4>Does this Data Look Correct to be imported?</h4>
+                                <table ng-if="importData.length" class="table table-striped table-bordered table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th ng-repeat="data in importData[0]" ng-bind="data"></th>
+                                        </tr>
+                                    </thead>
+        
+                                    <tbody>
+                                        <tr ng-repeat= "set in importData | limitTo: (1 - importData.length) | filter: importDataSearch">
+                                            <td ng-repeat="property in set">{{property}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <button class="btn btn-danger" ng-click="importAndUpload()">Import Data</button>
+                    </md-dialog>
+                </div>
+            </div>
+        </div>
+
+   
+</md-content>
+        </md-tab>
+
+          <!-- =======================HOUSING APP CONTROLLER ================================-->
+          <md-tab label="Housing">
+                <md-content class="md-padding">
+<div style="text-align:center;color:darkgrey">
+<!-- <h3>
+    <b>Housing Data</b>
+</h3> -->
+</div>
+<div ng-controller="HousingAppController" layout-padding>
+<div style="float:left;width:52%">
+    <h4 ng-init="getRooms()">
+        <b>Registered Rooms</b>
+    </h4>
+
+    <div class="btn-group">
+        <button class="btn btn-success btn-sm" ng-click="getRooms()">Refresh Rooms</button>
+        <button class="btn btn-info btn-sm" ng-click="downloadData()">Download Data</button>
+        <input type="file" class="form-control-file btn-sm" id="registrationUpload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+        <button class="btn btn-danger btn-sm btn-sm" ng-click="showImportBox($event)">Import Data</button>
+    </div>
+
+
+
+
+    <div>
+        <input type="text" class="form-control" placeholder="Search for Rooms" ng-model="mainsearch">
+
+        <h1 ng-if="!rooms.length" style="text-align:center;color:darkred">No Registered Rooms</h1>
+        <div style="overflow-y:scroll;height:65vh;width:100%">
+
+            <table ng-if="rooms.length" class="table table-striped table-bordered table-responsive">
+
+                <thead>
+                    <tr>
+                        <th>Floor #</th>
+                        <th>Room #</th>
+                        <th>Building</th>
+                        <th># Occupants</th>
+                        <th>Max Occupancy</th>
+
+                        <th>Actions</th>
+
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="room in rooms | filter: mainsearch">
+                        <td ng-bind="room.floornumber"></td>
+                        <td ng-bind="room.roomnumber"></td>
+                        <td ng-bind="room.building"> </td>
+                        <td ng-bind="room.occupants"></td>
+                        <td ng-bind="room.maxoccupancy"></td>
+
+
+                        <td>
+                            <div layout="row" class="btn-group">
+                                <button ng-click="showEditBox(room)" class="btn btn-primary btn-sm"> <span
+                                        class="glyphicon glyphicon-pencil"></span>Edit</button>
+                                <button ng-click="deleteRoom(room._id)" class="btn btn-danger btn-sm">
+                                    <span class="glyphicon glyphicon-remove"></span>Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div style="float:right;width:48%;height:90vh;overflow-y:scroll;background-color: whitesmoke">
+
+    <div>
+
+        <form role="form" name="mainform" class="well">
+
+            <div class="form-group">
+                <label for="roomnumber"> Room Number:</label>
+                <input type="text" id="roomnumber" class="form-control" placeholder="Enter Room Number"
+                    ng-model="editingRoom.roomnumber">
+            </div>
+            <div class="form-group">
+                <label for="floornumber"> Floor Number:</label>
+                <span>
+                    <input type="text" id="floornumber" class="form-control" placeholder="Enter Floor Number"
+                        ng-model="editingRoom.floornumber">
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="building"> Building Name:</label>
+                <span>
+                    <input type="text" id="building" class="form-control" placeholder="Enter Building Name (Kellas, Honeybee, etc.)"
+                        ng-model="editingRoom.building">
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Is This a Handicap Room?</label>
+                <input type="radio" ng-model="editingRoom.handicap" name="handicap" ng-value="true">Yes
+                <input type="radio" ng-model="editingRoom.handicap" name="handicap" ng-value="false">No
+            </div>
+            <div class="form-group">
+                <label for="building"> Amount of Beds:</label>
+                <span>
+                    <input type="number" id="beds" class="form-control" ng-model="editingRoom.beds">
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="building"> Current Amount of Occupants:</label>
+                <span>
+                    <input type="number" id="occupants" class="form-control" ng-model="editingRoom.occupants">
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="building"> Max Occupancy of Room:</label>
+                <span>
+                    <input type="number" id="maxoccupancy" class="form-control" ng-model="editingRoom.maxoccupancy">
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="additionalnotes">Additional Notes </label>
+                <br>
+                <input type="textarea" class="form-control" style="width:100%" name="additionalnotes" ng-model="editingRoom.additionalnotes" placeholder="Please Enter Any Additional Notes About the Room">
+            </div>
+        </form>
+        <div style="align-content: center">
+            <button class="btn btn-success" ng-click="createRoom(editingRoom)">Create Room</button>
+            <button class="btn btn-primary" ng-click="editRoom(editingRoom)">Edit Room</button>
+        </div>
+
+    </div>
+</div>
+
+<div style="visibility:hidden">
+        <div class="md-dialog-container" id="importHousingDialog">
+            <md-dialog style="max-width:98vw;width:100vw;height:90vh;max-height:100vh" layout-padding>
+                
+                    <input type="text" class="form-control" placeholder="Search for Import Data"
+                        ng-model="importDataSearch">
+
+                    <div style="overflow-y:scroll;width:100%">
+                        <h4>Does this Data Look Correct to be imported?</h4>
+                        <table ng-if="importData.length" class="table table-striped table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="data in importData[0]" ng-bind="data"></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr ng-repeat= "set in importData | limitTo: (1 - importData.length) | filter: importDataSearch">
+                                    <td ng-repeat="property in set">{{property}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <button class="btn btn-danger" ng-click="importAndUpload()">Import Data</button>
+            </md-dialog>
+        </div>
+</div>
+</div>
+
+
+                </md-content>
+                </md-tab>
+</md-tabs>
+    </md-content>
+    </div>
+
+
+
+
+</body>
+
+</html>

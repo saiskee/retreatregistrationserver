@@ -41,7 +41,10 @@
 
         <div>
           <button class="btn btn-success" ng-click="getRooms()">Refresh Rooms</button>
-          <button class="btn btn-info" ng-click="downloadData()"><span class="glyphicon glyphicon-share"></span> Download Data</button>
+          <button class="btn btn-info" ng-click="downloadData()">Download Data</button>
+          <p></p>
+          <input type="file" id="upload" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+          <button class="btn btn-danger btn-sm" ng-click="importData()">Import Data</button>
           <br>
           <br>
         </div>
@@ -59,11 +62,12 @@
 
               <thead>
                 <tr>
-                  <th>Room DBID</th>
+                  <th>Floor #</th>
                   <th>Room #</th>
-
                   <th>Building</th>
-                
+                  <th># Occupants</th>
+                  <th>Max Occupancy</th>
+                  
                   <th>Actions</th>
 
 
@@ -72,10 +76,12 @@
 
               <tbody>
                 <tr ng-repeat="room in rooms | filter: mainsearch">
-                  <td ng-bind="room._id"></td>
+                  <td ng-bind="room.floornumber"></td>
                   <td ng-bind="room.roomnumber"></td>
                   <td ng-bind="room.building"> </td>
-                  </td>
+                  <td ng-bind="room.occupants"></td>
+                  <td ng-bind="room.maxoccupancy"></td>
+                  
 
                   <td>
                     <div layout="row" class="btn-group">
@@ -120,13 +126,19 @@
             <div class="form-group">
                     <label for="building"> Amount of Beds:</label>
                     <span>
-                    <input type="number" id="floornumber" class="form-control" ng-model="editingRoom.beds">
+                    <input type="number" id="beds" class="form-control" ng-model="editingRoom.beds">
                     </span>
+            </div>
+            <div class="form-group">
+                <label for="building"> Current Amount of Occupants:</label>
+                <span>
+                    <input type="number" id="occupants" class="form-control" ng-model="editingRoom.occupants">
+                </span>
             </div>
             <div class="form-group">
                 <label for="building"> Max Occupancy of Room:</label>
                 <span>
-                    <input type="number" id="floornumber" class="form-control" ng-model="editingRoom.maxoccupancy">
+                    <input type="number" id="maxoccupancy" class="form-control" ng-model="editingRoom.maxoccupancy">
                 </span>
             </div>
             

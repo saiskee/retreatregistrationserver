@@ -18,7 +18,7 @@ mongoose.connect(mongouri,{useNewUrlParser:true}, function(error){
 }); 
 
 app.listen(8080);
-console.log("App listening on port 8080");
+console.log("App listening on port 8080, connected to " + mongouri);
 // connect to mongoDB database on modulus.io
 
 app.use(express.static(__dirname + '/public'));                 // set the static files location /public/img will be /img for users
@@ -48,16 +48,17 @@ Registree = mongoose.model('Registree', mongoose.Schema({
     ya:  {type: Boolean, default:false},
     newcomer:  {type: Boolean, default:false},
     accommodation:  {type: Boolean, default:false},
+    bhajanlist: {type: String, default:''},
     dietaryrestrictions:  {type: String, default:''},
     specialaccommodations:  {type: String, default:''},
     checkintime: {type: String, default: 'Not Checked In'},
     checkouttime: {type: String, default: 'Not Checked Out'},
     paid: {type: Boolean, default: false},
-    amountpaid: {type: Number, default: 0}
+    amountpaid: {type: Number, default: 0},
+    room: {}
 }));
 
 getReqParamsRegistree = function(req){
-   
     return {
         mainregistreeid :req.body.mainregistreeid,
         mainregistree: req.body.mainregistree,
@@ -71,6 +72,7 @@ getReqParamsRegistree = function(req){
         gender: req.body.gender,
         newcomer: req.body.newcomer,
         phone: req.body.phone,
+        bhajanlist: req.body.bhajanlist,
         centername : req.body.centername,
         durationofstay: req.body.durationofstay,
         accommodation: req.body.accommodation,
@@ -79,7 +81,8 @@ getReqParamsRegistree = function(req){
         checkintime: req.body.checkintime,
         checkouttime: req.body.checkouttime,
         paid: req.body.paid,
-        amountpaid: req.body.amountpaid
+        amountpaid: req.body.amountpaid,
+        room: req.body.room
 
     }
 }
@@ -91,12 +94,11 @@ Room = mongoose.model('Room', mongoose.Schema({
     handicap: {type: Boolean, default: false},
     beds: {type: Number, default: 0},
     maxoccupancy: {type: Number, default: 0},
-    occupants: {type: Object, default: {}},
+    occupants: {type: Number, default:0},
     additionalnotes: {type: String, default: ''}
 }));
 
 getReqParamsRoom = function(req){
-
     return{
     roomnumber: req.body.roomnumber,
     floornumber: req.body.floornumber,
@@ -106,7 +108,6 @@ getReqParamsRoom = function(req){
     maxoccupancy: req.body.maxoccupancy,
     occupants: req.body.occupants,
     additionalnotes: req.body.additionalnotes
-
     }
 }
 //routes=======================================================================
@@ -183,7 +184,6 @@ app.put('/api/registree/:registree_id', (req, res) => {
 //room api -----------------------------------------------------------------
         //create a room
 app.post('/api/room', function (req,res){
-
     Room.create(getReqParamsRoom(req), function(err,room){
         if (err){
 
@@ -223,11 +223,10 @@ app.delete('/api/room/:room_id', function (req, res) {
 
 
 //update a room matching with room_id in request
-app.put('/api/room/:room_id', function (req, res) {
-    Room.findByIdAndUpdate(req.params.room_id, getReqParamsRoom(req), 
+app.put('/api/room/:room_id', (req, res) =>{
+    Room.findOneAndUpdate({_id:req.params.room_id}, getReqParamsRoom(req), 
     function (err, room) {
             if (err) {
-                console.log(" ROOM PUT error :", err);
                 res.send(err);
                
             } else{
@@ -245,9 +244,6 @@ app.get('/',function(req,res){
 app.get('/api/table', function(req,res){
     res.sendfile('./public/table/table.html')
 })
-app.get('/api/table1', function(req,res){
-    res.sendfile('./public/table/table1.html')
-})
 app.get('/scripts/:script', (req,res) => {
     res.sendfile('./public/scripts/'+req.params.script);
 })
@@ -259,6 +255,10 @@ app.get('/form', function (req, res) {
 
 app.get('/housing', function (req, res){
     res.sendfile('./public/housing/housing.html');
+})
+
+app.get('/thapp', function(req,res){
+    res.sendfile('./public/table/tableandhousing.html')
 })
 
 

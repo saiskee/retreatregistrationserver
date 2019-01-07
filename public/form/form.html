@@ -23,17 +23,6 @@
 </head>
 
 <body ng-app="FormApp" style="background:whitesmoke;">
-    <!-- <md-toolbar class="md-hue-1">
-        <div layout="row">
-          <md-toolbar-filler layout="row" layout-align="center center">
-            <md-icon id="filler-icon"></md-icon>
-          </md-toolbar-filler>
-          <h2 class="md-toolbar-tools">
-            <img class="logo-image"  src="/form/logo-en_4.png">
-            <span>Toolbar: with filler and icon (md-hue-1)</span>
-          </h2>
-        </div>
-      </md-toolbar> -->
 
     <md-toolbar name="top" class="md-hue-1">
         <div layout="row">
@@ -139,7 +128,17 @@
                                 <select class="form-control" ng-model="registree.centername" id="centerselect" ng-options="x for x in centers" required>
                                     <option value="" disabled selected>Choose your center:</option>
                                 </select>
-
+                            </div>
+                            <div class="form-group">
+                                <label>Would you like to lead a bhajan during the retreat?</label>
+                                <input type="radio" ng-model="bhajan" name="bhajan"  ng-value="true"><label>Yes</label>
+                                <input type="radio" ng-model="bhajan" name="bhajan"  ng-value="false"><label>No</label>
+                            </div>
+                            <div class="form-group" ng-if="bhajan">
+                                    <label for="bhajanlist">List 3 Bhajans you would like to offer:</label>
+                                    <br>
+                                    <input type="textarea" class="form-control" style="width:100%" name="bhajanlist" ng-model="registree.bhajanlist"
+                                        placeholder="Please enter 3 bhajans here">
                             </div>
                             <div class="form-group" ng-init="registree.durationofstay = {'friday':false,'saturday':false,'sunday':false}">
                                 <label for="durationofstay"> Please check which days will you be staying:</label>
@@ -166,15 +165,12 @@
                                     placeholder="Please enter any dietary restrictions that you have">
                             </div>
                             <div class="form-group">
-                                <label for="specialaccommodations">Will you be needing any special accommodations? (Handicap,
-                                    etc.) </label>
-                                <br>
-                                <input type="textarea" class="form-control" style="width:100%" name="specialaccommodations" ng-model="registree.specialaccommodations"
-                                    placeholder="Please enter any special accommodations you need">
+                                <label for="specialaccommodations">Will you be needing any special accommodations?</label>
+                                <select ng-model="registree.specialaccommodations" id="specialaccommodations" ng-options="x for x in ['None','Elderly','Infant','Handicap']" required>
+                                    <option value="" disabled selected>Please select:</option>
+                                </select>
                             </div>
                             <br ng-init="forms.push(mainform)">
-
-
                         </form>
                     </md-content>
                 </md-tab>
@@ -250,7 +246,17 @@
                                 <input type="checkbox" name="sundaycheckbox" ng-model="submember.durationofstay['sunday']">
                                 <label>Sunday</label>
                             </div>
-
+                            <div class="form-group">
+                                    <label>Would you like to lead a bhajan during the retreat?</label>
+                                    <input type="radio" ng-model="bhajan" name="bhajan"  ng-value="true"><label>Yes</label>
+                                    <input type="radio" ng-model="bhajan" name="bhajan"  ng-value="false"><label>No</label>
+                            </div>
+                                <div class="form-group" ng-if="bhajan">
+                                        <label for="bhajanlist">List 3 Bhajans you would like to offer:</label>
+                                        <br>
+                                        <input type="textarea" class="form-control" style="width:100%" name="bhajanlist" ng-model="submember.bhajanlist"
+                                            placeholder="Please enter 3 bhajans here">
+                            </div>
                             <div class="form-group">
                                 <label>Will you be needing housing accommodation?</label>
                                 <br>
@@ -266,12 +272,12 @@
                                     ng-model="submember.dietaryrestrictions" placeholder="Please enter any dietary restrictions that you have">
                             </div>
                             <div class="form-group">
-                                <label for="specialaccommodations">Will you be needing any special accommodations? (Handicap,
-                                    etc.) </label>
-                                <br>
-
-                                <input ng-init="forms.push(subform);submember.specialaccommodations=''" type="textarea" class="form-control" style="width:100%"
-                                    name="specialaccommodations" ng-model="submember.specialaccommodations" placeholder="Please enter any special accommodations you need">
+                                    <label for="specialaccommodations">Will you be needing any special accommodations?</label>
+                                    <select ng-model="registree.specialaccommodations" id="specialaccommodations" ng-options="x for x in ['None','Elderly','Infant','Handicap']" required>
+                                        <option value="" disabled selected>Please select:</option>
+                                    </select>
+                                </div>
+                            <div class="form-group" ng-init="forms.push(subform);submember.specialaccommodations=''"" required>
                             </div>
                         </form>
                     </md-content>
