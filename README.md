@@ -55,3 +55,12 @@ Rooms have the following properties:
 *   ```additionalnotes```: ```String``` *Any additional notes about the room*
 * ```_id```: ```String``` *The unique Database identifier (DBID) of the registree*
 
+## Updating A Model
+---
+When adding or deleting a property from a Model, a few other places must be updated. Replace ```Model``` with which ever model you are working with (Registree, Room, etc.) and propertyname with whichever property you are updating (mainregistree, registree, roomnumber,etc.):
+1. **(server.js)**: ```Model = mongoose.model('Model', mongoose.Schema({...})```
+2. **(server.js)**:  ```getReqParamsModel = function(req){...}```
+     * simply add the new property as ```propertyname: req.body.propertyname```
+3. **(public/scripts/thapp.js)** ```class Model{ constructor(){...} }```
+    * add ```this.propertyname```
+4. **(public/...)** Make sure to update any forms that you need to show/update this property on
